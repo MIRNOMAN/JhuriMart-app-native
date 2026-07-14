@@ -1,68 +1,20 @@
-import { ActivityIndicator, StyleSheet, Text, View, type LayoutChangeEvent } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
-type BrandSplashScreenProps = {
-  onLayout: (event: LayoutChangeEvent) => void;
-};
+import { AppText } from '@/components/ui/app-text';
+import { theme } from '@/constants/theme';
 
-export function BrandSplashScreen({ onLayout }: BrandSplashScreenProps) {
+export function BrandSplashScreen() {
   return (
-    <View style={styles.container} onLayout={onLayout}>
+    <View style={styles.container}>
       <StatusBar style="light" />
       <View style={styles.brand}>
-        <Text style={styles.logo}>JhuriMart</Text>
-        <Text style={styles.tagline}>Shopping made simple, right from home</Text>
+        <AppText variant="display" color={theme.colors.white} style={styles.logo}>Kutuku</AppText>
+        <AppText variant="caption" color={theme.colors.splashText}>Any shopping just from home</AppText>
       </View>
-
-      <View style={styles.loader}>
-        <ActivityIndicator color="#FFFFFF" size="small" />
-        <Text style={styles.loadingText}>Loading your store...</Text>
-      </View>
-
-      <Text style={styles.version}>Version 1.0.0</Text>
+      <AppText variant="caption" color={theme.colors.splashSubtle} style={styles.version}>Version 0.0.1</AppText>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#5752C7',
-  },
-  brand: {
-    alignItems: 'center',
-    marginTop: -40,
-  },
-  logo: {
-    color: '#FFFFFF',
-    fontSize: 36,
-    lineHeight: 44,
-    fontWeight: '800',
-    letterSpacing: -1,
-  },
-  tagline: {
-    marginTop: 8,
-    color: '#E7E5FF',
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  loader: {
-    position: 'absolute',
-    bottom: 92,
-    alignItems: 'center',
-    gap: 10,
-  },
-  loadingText: {
-    color: '#E7E5FF',
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  version: {
-    position: 'absolute',
-    bottom: 32,
-    color: '#D9D7FF',
-    fontSize: 11,
-  },
-});
+const styles = StyleSheet.create({ container: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.colors.violet }, brand: { alignItems: 'center', gap: 8 }, logo: { fontSize: 30 }, version: { position: 'absolute', bottom: 40 } });

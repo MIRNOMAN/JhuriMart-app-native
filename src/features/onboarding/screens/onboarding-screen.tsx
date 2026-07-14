@@ -11,8 +11,8 @@ import {
   type ViewToken,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { theme } from '@/constants/theme';
 
-const PURPLE = '#5752C7';
 const VIEWABILITY_CONFIG = { itemVisiblePercentThreshold: 60 };
 
 const slides = [
@@ -34,10 +34,11 @@ const slides = [
 ] as const;
 
 type OnboardingScreenProps = {
-  onComplete: () => void;
+  onCreateAccount: () => void;
+  onLogin: () => void;
 };
 
-export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
+export function OnboardingScreen({ onCreateAccount, onLogin }: OnboardingScreenProps) {
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const listRef = useRef<FlatList<(typeof slides)[number]>>(null);
@@ -105,12 +106,12 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
 
         <Pressable
           accessibilityRole="button"
-          onPress={onComplete}
+          onPress={onCreateAccount}
           style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}>
           <Text style={styles.primaryButtonText}>Create Account</Text>
         </Pressable>
 
-        <Pressable accessibilityRole="button" onPress={onComplete} hitSlop={8}>
+        <Pressable accessibilityRole="button" onPress={onLogin} hitSlop={8}>
           <Text style={styles.loginText}>Already Have an Account</Text>
         </Pressable>
       </View>
@@ -121,7 +122,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.white,
   },
   slide: {
     alignItems: 'center',
@@ -129,14 +130,14 @@ const styles = StyleSheet.create({
   },
   image: {
     borderRadius: 38,
-    backgroundColor: '#F0EFF1',
+    backgroundColor: theme.colors.surfaceStrong,
   },
   title: {
     marginTop: 30,
-    color: '#29283A',
+    color: theme.colors.ink,
     fontSize: 24,
     lineHeight: 30,
-    fontFamily: 'Poppins_800ExtraBold',
+    fontFamily: 'PlusJakartaSans_700Bold',
     textAlign: 'center',
     letterSpacing: -0.35,
   },
@@ -147,10 +148,10 @@ const styles = StyleSheet.create({
   },
   description: {
     marginTop: 14,
-    color: '#B3B2C4',
+    color: theme.colors.muted,
     fontSize: 14,
     lineHeight: 20,
-    fontFamily: 'Poppins_400Regular',
+    fontFamily: 'PlusJakartaSans_400Regular',
     textAlign: 'center',
   },
   footer: {
@@ -168,33 +169,33 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 6,
-    backgroundColor: '#D9D8E7',
+    backgroundColor: theme.colors.lineStrong,
   },
   activeDot: {
-    backgroundColor: PURPLE,
+    backgroundColor: theme.colors.violet,
   },
   primaryButton: {
     height: 55,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 28,
-    backgroundColor: PURPLE,
+    backgroundColor: theme.colors.violet,
   },
   buttonPressed: {
     opacity: 0.82,
     transform: [{ scale: 0.99 }],
   },
   primaryButtonText: {
-    color: '#FFFFFF',
+    color: theme.colors.white,
     fontSize: 13,
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: 'PlusJakartaSans_600SemiBold',
   },
   loginText: {
     marginTop: 24,
-    color: PURPLE,
+    color: theme.colors.violet,
     fontSize: 16,
     lineHeight: 20,
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: 'PlusJakartaSans_600SemiBold',
     textAlign: 'center',
   },
 });

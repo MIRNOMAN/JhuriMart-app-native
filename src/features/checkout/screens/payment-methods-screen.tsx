@@ -1,0 +1,17 @@
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { router, type Href } from 'expo-router';
+
+import { AppButton } from '@/components/ui/app-button';
+import { AppHeader } from '@/components/ui/app-header';
+import { AppScreen } from '@/components/ui/app-screen';
+import { AppText } from '@/components/ui/app-text';
+import { theme } from '@/constants/theme';
+import { useCheckoutStore, type PaymentMethod } from '@/store/checkout-store';
+
+export function PaymentMethodsScreen() {
+  const { payment, setPayment } = useCheckoutStore();
+  return <AppScreen padded={false}><View style={styles.header}><AppHeader title="Payment" /></View><View style={styles.dim}><AppText variant="subtitle">Address</AppText><View style={styles.fake} /><AppText variant="subtitle">Products (3)</AppText><View style={styles.fakeLarge} /></View><View style={styles.sheet}><View style={styles.handle} /><AppText variant="subtitle">Payment Method</AppText><Method icon="P" label="Paypal" detail="example@gmail.com" value="paypal" selected={payment} onPress={setPayment} /><Method icon="🔴" label="Mastercard" detail="4827 8472 7424 ••••" value="mastercard" selected={payment} onPress={setPayment} /><Pressable style={styles.add} onPress={() => router.push('/add-card' as Href)}><Ionicons name="add-circle-outline" size={19} /><AppText variant="label">Add Payment Method</AppText></Pressable><AppButton label="Confirm Payment" onPress={() => router.back()} /></View></AppScreen>;
+}
+function Method({ icon, label, detail, value, selected, onPress }: { icon: string; label: string; detail: string; value: PaymentMethod; selected: PaymentMethod; onPress: (value: PaymentMethod) => void }) { const active = value === selected; return <Pressable style={styles.method} onPress={() => onPress(value)}><View style={styles.icon}><AppText variant="label">{icon}</AppText></View><View style={{ flex: 1 }}><AppText variant="label">{label}</AppText><AppText variant="caption" color={theme.colors.muted}>{detail}</AppText></View><View style={[styles.radio, active && styles.radioActive]}>{active ? <Ionicons name="checkmark" size={10} color="white" /> : null}</View></Pressable>; }
+const styles = StyleSheet.create({ header: { paddingHorizontal: 12, opacity: 0.45 }, dim: { flex: 1, padding: 16, gap: 12, opacity: 0.35 }, fake: { height: 70, borderRadius: 12, backgroundColor: theme.colors.surface }, fakeLarge: { height: 180, borderRadius: 12, backgroundColor: theme.colors.surface }, sheet: { position: 'absolute', left: 0, right: 0, bottom: 0, padding: 16, paddingBottom: 24, backgroundColor: theme.colors.white, borderTopLeftRadius: 20, borderTopRightRadius: 20, gap: 11, ...theme.shadow.sheet }, handle: { width: 52, height: 4, borderRadius: 2, backgroundColor: theme.colors.lineStrong, alignSelf: 'center' }, method: { height: 59, paddingHorizontal: 10, borderRadius: theme.radius.md, backgroundColor: theme.colors.surface, flexDirection: 'row', alignItems: 'center', gap: 10 }, icon: { width: 35, height: 35, borderRadius: 18, backgroundColor: theme.colors.white, alignItems: 'center', justifyContent: 'center' }, radio: { width: 16, height: 16, borderWidth: 1, borderColor: theme.colors.lineStrong, borderRadius: 4, alignItems: 'center', justifyContent: 'center' }, radioActive: { backgroundColor: theme.colors.violet, borderColor: theme.colors.violet }, add: { height: 42, flexDirection: 'row', alignItems: 'center', gap: 9 } });
