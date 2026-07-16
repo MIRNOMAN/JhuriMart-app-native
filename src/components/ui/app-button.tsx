@@ -1,16 +1,16 @@
-import { Pressable, StyleSheet, View, type PressableProps } from 'react-native';
+import { Pressable, StyleSheet, View, type PressableProps, type TextStyle } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { theme } from '@/constants/theme';
 import { AppText } from './app-text';
 
 type ButtonVariant = 'primary' | 'outline' | 'ghost' | 'danger';
-type AppButtonProps = PressableProps & { label: string; variant?: ButtonVariant; left?: React.ReactNode; fullWidth?: boolean };
+type AppButtonProps = PressableProps & { label: string; variant?: ButtonVariant; left?: React.ReactNode; fullWidth?: boolean; labelStyle?: TextStyle };
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 /** Animated button supporting all core Kutuku action styles. */
-export function AppButton({ label, variant = 'primary', left, fullWidth = true, disabled, style, ...props }: AppButtonProps) {
+export function AppButton({ label, variant = 'primary', left, fullWidth = true, disabled, style, labelStyle, ...props }: AppButtonProps) {
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   return (
@@ -22,7 +22,7 @@ export function AppButton({ label, variant = 'primary', left, fullWidth = true, 
       style={[styles.base, styles[variant], fullWidth && styles.full, disabled && styles.disabled, animatedStyle, style]}
       {...props}>
       {left ? <View style={styles.icon}>{left}</View> : null}
-      <AppText variant="label" color={variant === 'primary' ? theme.colors.white : variant === 'danger' ? theme.colors.danger : theme.colors.violet}>
+      <AppText variant="label" color={variant === 'primary' ? theme.colors.white : variant === 'danger' ? theme.colors.danger : theme.colors.violet} style={labelStyle}>
         {label}
       </AppText>
     </AnimatedPressable>

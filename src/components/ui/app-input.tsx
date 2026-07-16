@@ -1,21 +1,27 @@
 import { forwardRef, useState } from 'react';
-import { Pressable, StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
+import { Pressable, StyleSheet, TextInput, View, type StyleProp, type TextInputProps, type ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { theme } from '@/constants/theme';
 import { AppText } from './app-text';
 
-type AppInputProps = TextInputProps & { label?: string; error?: string; icon?: keyof typeof Ionicons.glyphMap; password?: boolean };
+type AppInputProps = TextInputProps & {
+  label?: string;
+  error?: string;
+  icon?: keyof typeof Ionicons.glyphMap;
+  password?: boolean;
+  fieldStyle?: StyleProp<ViewStyle>;
+};
 
 /** Labelled form field with icon, password visibility, focus, and validation states. */
-export const AppInput = forwardRef<TextInput, AppInputProps>(function AppInput({ label, error, icon, password, style, onFocus, onBlur, ...props }, ref) {
+export const AppInput = forwardRef<TextInput, AppInputProps>(function AppInput({ label, error, icon, password, fieldStyle, style, onFocus, onBlur, ...props }, ref) {
   const [focused, setFocused] = useState(false);
   const [hidden, setHidden] = useState(password);
   return (
     <View style={styles.group}>
       {label ? <AppText variant="label" style={styles.label}>{label}</AppText> : null}
-      <View style={[styles.field, focused && styles.focused, error && styles.invalid]}>
-        {icon ? <Ionicons name={icon} size={17} color={focused ? theme.colors.violet : theme.colors.subtle} /> : null}
+      <View style={[styles.field, fieldStyle, focused && styles.focused, error && styles.invalid]}>
+        {icon ? <Ionicons name={icon} size={24} color={focused || Boolean(props.value) ? theme.colors.violet : theme.colors.subtle} /> : null}
         <TextInput
           ref={ref}
           placeholderTextColor={theme.colors.subtle}
@@ -37,9 +43,9 @@ export const AppInput = forwardRef<TextInput, AppInputProps>(function AppInput({
 });
 
 const styles = StyleSheet.create({
-  group: { gap: 7 }, label: { marginLeft: 1 },
+  group: { gap: 7 }, label: { marginLeft: 1  , fontSize: 16, lineHeight: 24 },
   field: { minHeight: 48, paddingHorizontal: 13, borderWidth: 1, borderColor: theme.colors.transparent, borderRadius: theme.radius.md, backgroundColor: theme.colors.surface, flexDirection: 'row', alignItems: 'center', gap: 10 },
   focused: { borderColor: theme.colors.violet, backgroundColor: theme.colors.white },
   invalid: { borderColor: theme.colors.danger },
-  input: { flex: 1, paddingVertical: 0, color: theme.colors.ink, fontFamily: theme.type.regular, fontSize: 11 },
+  input: { flex: 1, paddingVertical: 0, color: theme.colors.ink, fontFamily: theme.type.regular, fontSize: 14 },
 });

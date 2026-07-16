@@ -7,12 +7,12 @@ type AppTextVariant = 'caption' | 'body' | 'label' | 'subtitle' | 'title' | 'dis
 type AppTextProps = TextProps & { variant?: AppTextVariant; color?: string; align?: TextStyle['textAlign'] };
 
 const variants: Record<AppTextVariant, TextStyle> = {
-  caption: { fontFamily: theme.type.regular, fontSize: 10, lineHeight: 15 },
+  caption: { fontFamily: theme.type.regular, fontSize: 14, lineHeight: 20 },
   body: { fontFamily: theme.type.regular, fontSize: 12, lineHeight: 18 },
-  label: { fontFamily: theme.type.semibold, fontSize: 11, lineHeight: 16 },
-  subtitle: { fontFamily: theme.type.semibold, fontSize: 14, lineHeight: 20 },
-  title: { fontFamily: theme.type.bold, fontSize: 18, lineHeight: 25 },
-  display: { fontFamily: theme.type.bold, fontSize: 26, lineHeight: 34 },
+  label: { fontFamily: theme.type.semibold, fontSize: 16, lineHeight: 26 },
+  subtitle: { fontFamily: theme.type.semibold, fontSize: 16, lineHeight: 20 },
+  title: { fontFamily: theme.type.bold, fontSize: 24, lineHeight: 25 },
+  display: { fontFamily: theme.type.bold, fontSize: 36, lineHeight: 34 },
 };
 
 /** Typography primitive backed by the Kutuku font scale. */
