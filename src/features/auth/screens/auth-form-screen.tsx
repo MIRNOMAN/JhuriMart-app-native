@@ -21,6 +21,7 @@ import { AppInput } from "@/components/ui/app-input";
 import { AppScreen } from "@/components/ui/app-screen";
 import { AppText } from "@/components/ui/app-text";
 import { theme } from "@/constants/theme";
+import { useAuthStore } from "@/store/auth-store";
 
 const createSchema = z.object({
   username: z.string().min(2, "Enter your username"),
@@ -46,6 +47,7 @@ type AuthFormScreenProps = { mode: "create" | "login" };
 
 export function AuthFormScreen({ mode }: AuthFormScreenProps) {
   const create = mode === "create";
+  const signIn = useAuthStore((state) => state.signIn);
   const [recoveryStep, setRecoveryStep] = useState<RecoveryStep | null>(null);
   const {
     control,
@@ -59,8 +61,14 @@ export function AuthFormScreen({ mode }: AuthFormScreenProps) {
       password: "",
     },
   });
-  const submit = () =>
-    router.push((create ? "/verification" : "/(tabs)") as Href);
+  const submit = ({ email }: CreateValues) => {
+    if (create) {
+      router.push({ pathname: "/verification", params: { email } });
+      return;
+    }
+    signIn();
+    router.replace("/(tabs)" as Href);
+  };
   return (
     <AppScreen scroll style={styles.screen}>
       <StatusBar style="dark" />

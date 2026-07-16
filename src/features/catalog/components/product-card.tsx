@@ -13,12 +13,15 @@ type ProductCardProps = { product: Product; width?: number; compact?: boolean };
 /** Reusable responsive catalog tile used by home, search, store, and favorites. */
 export function ProductCard({ product, width, compact }: ProductCardProps) {
   const window = useWindowDimensions();
-  const cardWidth = width ?? Math.min(170, (window.width - 44) / 2);
+  // The reference design uses a 20px gutter between two 154px tiles on a
+  // 375px phone. Keeping the calculation responsive also preserves that
+  // rhythm on smaller Android devices and tablets.
+  const cardWidth = width ?? Math.min(170, (window.width - 68) / 2);
   const favorite = useWishlistStore((state) => state.ids.includes(product.id));
   const toggle = useWishlistStore((state) => state.toggle);
   return (
     <Pressable style={[styles.root, { width: cardWidth }]} onPress={() => router.push(`/product/${product.id}` as Href)}>
-      <View style={[styles.imageWrap, { height: compact ? 126 : cardWidth * 1.08 }]}>
+      <View style={[styles.imageWrap, { height: compact ? (width === 64 ? 72 : cardWidth * 1.08) : cardWidth * 1.08 }]}>
         <Image source={product.image} style={styles.image} contentFit="cover" />
         <Pressable style={styles.favorite} onPress={(event) => { event.stopPropagation(); toggle(product.id); }}><Ionicons name={favorite ? 'heart' : 'heart-outline'} size={15} color={favorite ? theme.colors.danger : theme.colors.white} /></Pressable>
       </View>

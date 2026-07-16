@@ -1,4 +1,5 @@
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { FlatList, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { router, type Href } from 'expo-router';
@@ -11,6 +12,15 @@ import { products } from '@/features/catalog/data/catalog';
 import { theme } from '@/constants/theme';
 
 export function HomeScreen() {
+  const { width } = useWindowDimensions();
+  const bannerWidth = Math.min(width, 560) - 46;
+  const banners = [
+    require('../../../../assets/images/catalog/banner.png'),
+    require('../../../../assets/images/catalog/banner.png'),
+    require('../../../../assets/images/catalog/banner.png'),
+  ];
+  const [activeBanner, setActiveBanner] = useState(0);
+
   return (
     <AppScreen padded={false}>
       <StatusBar style="dark" />
@@ -25,8 +35,17 @@ export function HomeScreen() {
           <View style={styles.activeTab}><AppText variant="subtitle">Home</AppText></View>
           <Pressable style={styles.tab} onPress={() => router.push('/categories' as Href)}><AppText variant="subtitle" color={theme.colors.subtle}>Category</AppText></Pressable>
         </View>
-        <Image source={require('../../../../assets/images/catalog/banner.png')} style={styles.banner} contentFit="cover" />
-        <View style={styles.pagination}><View style={styles.activeDot} /><View style={styles.pageDot} /><View style={styles.pageDot} /></View>
+        <FlatList
+          data={banners}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(_, index) => `home-banner-${index}`}
+          renderItem={({ item }) => <Image source={item} style={[styles.banner, { width: bannerWidth }]} contentFit="cover" />}
+          onMomentumScrollEnd={(event) => setActiveBanner(Math.round(event.nativeEvent.contentOffset.x / bannerWidth))}
+          getItemLayout={(_, index) => ({ length: bannerWidth, offset: bannerWidth * index, index })}
+        />
+        <View style={styles.pagination}>{banners.map((_, index) => <View key={index} style={index === activeBanner ? styles.activeDot : styles.pageDot} />)}</View>
         <View style={styles.sectionHeader}><AppText variant="title">New Arrivals 🔥</AppText><Pressable onPress={() => router.push('/search?query=bag' as Href)}><AppText variant="label" color={theme.colors.violet}>See All</AppText></Pressable></View>
         <View style={styles.grid}>{products.slice(0, 6).map((product) => <ProductCard key={product.id} product={product} />)}</View>
       </ScrollView>

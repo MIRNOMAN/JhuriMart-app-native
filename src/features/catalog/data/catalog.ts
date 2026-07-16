@@ -16,6 +16,7 @@ export const products: Product[] = [
 ];
 
 export const categories: Category[] = [
+  { id: 'new-arrivals', name: 'New Arrivals', count: 208, image: require('../../../../assets/images/catalog/category-clothes.png') },
   { id: 'clothes', name: 'Clothes', count: 358, image: require('../../../../assets/images/catalog/category-clothes.png') },
   { id: 'bags', name: 'Bags', count: 160, image: require('../../../../assets/images/catalog/category-bags.png') },
   { id: 'shoes', name: 'Shoes', count: 230, image: require('../../../../assets/images/catalog/category-shoes.png') },
